@@ -1,28 +1,28 @@
+const Message = require("./model");
 
-const Model = require("./model");
-
-
-
-
-async function getMessages(filterUser) {
-  let filter = {};
-  if (filterUser != null) {
-    filter = {
-      user: filterUser
-    };
-  }
-  const messages = await Model.find(filter);
-  return messages;
+async function getMessages(chat) {
+  return new Promise((resolve, reject) => {
+    Message.find({ chat: chat })
+      .populate("chat")
+      .exec((error, populatedData) => {
+        if (error) {
+          reject(error);
+          return false;
+        }
+        resolve(populatedData);
+      });
+      
+  });
 }
 
 function addMessage(message) {
-  const newMessage = new Model(message);
+  const newMessage = new Message(message);
   console.log(message);
   newMessage.save();
 }
 
 async function updateMessage(id, message) {
-  const foundMessage = await Model.findOne({ _id: id });
+  const foundMessage = await Message.findOne({ _id: id });
   foundMessage.message = message;
 
   const updatedMessage = await foundMessage.save();
@@ -30,7 +30,7 @@ async function updateMessage(id, message) {
 }
 
 async function deleteMessage(id) {
-  return Model.deleteOne({ _id: id });
+  return Message.deleteOne({ _id: id });
 }
 
 module.exports = {

@@ -4,7 +4,8 @@ const response = require("../../network/response");
 const controller = require("./controller");
 
 router.get("/", function(req, res) {
-  const filterMessage = req.query.user || null;
+  const filterMessage = req.query.chat || null;
+  
   controller
     .getMessages(filterMessage)
     .then(data => {
@@ -17,7 +18,7 @@ router.get("/", function(req, res) {
 
 router.post("/", function(req, res) {
   controller
-    .create(req.body.user, req.body.message)
+    .create(req.body.chat, req.body.user, req.body.message)
     .then(data => {
       response.success(req, res, data, 201);
     })
