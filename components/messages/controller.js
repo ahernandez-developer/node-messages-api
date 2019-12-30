@@ -1,4 +1,5 @@
 const store = require("./store");
+const socket = require("../../socket").socket;
 
 function getMessages(filterChat) {
   return new Promise((resolve, reject) => {
@@ -30,6 +31,9 @@ function create(chat,user, message,file) {
       };
       console.log(NewMessage);
       store.add(NewMessage);
+
+      socket.io.emit("message",NewMessage);
+
       resolve(NewMessage);
       return true;
     }

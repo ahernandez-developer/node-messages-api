@@ -1,15 +1,22 @@
-//import express from 'express';
 const express = require('express');
-const bodyParser = require('body-parser');
-var app = express();
-app.use(bodyParser.json());
-const db = require('./db');
-db("mongodb+srv://alinrealin:210220123@cluster0-tr0ss.mongodb.net/telegram");
-const router = require('./network/web');
-router(app);
+const app = express();
+const server = require('http').Server(app);
 
+const cors = require("cors");
+const bodyParser = require('body-parser');
+const router = require('./network/web');
+const socket = require("./socket");
+const db = require('./db');
+
+db("mongodb+srv://alinrealin:210220123@cluster0-tr0ss.mongodb.net/telegram");
+
+socket.connect(server);
+router(app);
+app.use(cors());
+app.use(bodyParser.json());
 app.use("/",express.static("public"));
 
-app.listen(3000);
+server.listen(3000,function(){
+    console.log("server is running on http://localhost:3000");
+});
 
-console.log("server is running on http://localhost:3000");
