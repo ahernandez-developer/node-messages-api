@@ -17,6 +17,7 @@ const MessageSchema = new Schema({
 
     },
     date: Date,
+    file:String
 });
 
 const Model = mongoose.model("messages",MessageSchema);

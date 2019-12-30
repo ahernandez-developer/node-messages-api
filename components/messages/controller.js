@@ -10,18 +10,23 @@ function getMessages(filterChat) {
 }
 
 
-function create(chat,user, message) {
+function create(chat,user, message,file) {
   return new Promise((resolve, reject) => {
     if (chat==null || user == null || message == null) {
       console.error("messageController: incorrect data");
       reject("incorrect data");
       return false;
     } else {
+      let fileUrl ="";
+      if(file){
+        fileUrl = "http://localhost:3000/app/uploads/"+file.filename
+      }
       const NewMessage = {
         chat:chat,
         user: user,
         message: message,
-        date: new Date()
+        date: new Date(),
+        file: fileUrl
       };
       console.log(NewMessage);
       store.add(NewMessage);
